@@ -4,6 +4,12 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Main class that drives the demonstrations.
+ *
+ * @author "Monirul Hasan"
+ * @version 0.0.1-SNAPSHOT
+ */
 public class Main {
     private List<Student> studentList;
 

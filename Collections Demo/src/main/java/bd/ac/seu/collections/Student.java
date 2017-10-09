@@ -1,11 +1,11 @@
 package bd.ac.seu.collections;
 
 /**
- * Model class to represent Student data type
+ * Model class to represent Student data type.
  *
  * For each student we retain their student ID and name.
  * @author Monirul Hasan
- * @version 0.0.1-SNAPSHOT
+ * @version 1.0-SNAPSHOT
  */
 public class Student {
     private int studentId;

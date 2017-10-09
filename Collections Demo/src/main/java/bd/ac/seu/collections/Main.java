@@ -7,7 +7,7 @@ import java.util.List;
 /**
  * Main class that drives the demonstrations.
  *
- * @author "Monirul Hasan"
+ * @author Monirul Hasan
  * @version 0.0.1-SNAPSHOT
  */
 public class Main {

@@ -32,4 +32,54 @@ public class StudentDaoMysqlImplementation implements StudentDao {
         }
         return studentList;
     }
+
+    @Override
+    public boolean deleteStudent(int studentId) {
+        try {
+            Connection connection = JdbcConnection.getConnection();
+
+            Statement statement = connection.createStatement();
+
+            String query;
+            query = "DELETE FROM registration WHERE studentId = " + studentId;
+            statement.executeUpdate(query);
+            query = "DELETE FROM grades WHERE studentId = " + studentId;
+            statement.executeUpdate(query);
+            query = "DELETE FROM student WHERE studentId = " + studentId;
+            int x = statement.executeUpdate(query);
+
+            if (x > 0)
+                return true;
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return false;
+    }
+
+    @Override
+    public Student getStudent(int studentId) {
+        Student student = null;
+
+        try {
+            Connection connection = JdbcConnection.getConnection();
+
+            Statement statement = connection.createStatement();
+
+            String query = "SELECT * FROM student WHERE studentId = " + studentId;
+            ResultSet resultSet = statement.executeQuery(query);
+            studentList = new ArrayList<>();
+
+            while (resultSet.next()) {
+                int id = resultSet.getInt("studentId");
+                String name = resultSet.getString("studentName");
+                student = new Student(id, name);
+                studentList.add(student);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return student;
+    }
 }

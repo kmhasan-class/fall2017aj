@@ -1,9 +1,5 @@
 package bd.ac.seu.collections;
 
-import jdk.nashorn.internal.scripts.JD;
-
-import java.sql.*;
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -14,11 +10,21 @@ import java.util.List;
  */
 public class Main {
     private List<Student> studentList;
+    private List<Course> courseList;
+    private List<Registration> registrationList;
 
     public Main() {
-//        StudentDao studentDao = new StudentDaoMysqlImplementation();
-        StudentDao studentDao = new StudentDaoCsvImplementation();
+        StudentDao studentDao = new StudentDaoMysqlImplementation();
+//        StudentDao studentDao = new StudentDaoCsvImplementation();
         studentList = studentDao.getAllStudents();
+
+        CourseDao courseDao = new CourseDaoMysqlImplementation();
+        courseList = courseDao.getAllCourses();
+
+        RegistrationDao registrationDao = new RegistrationDaoMysqlImplementation();
+        registrationList = registrationDao.getAllRegistrations();
+
+        registrationList.forEach(System.out::println);
 /*
 // From JDK1.1+
             for (int i = 0; i < studentList.size(); i++)
@@ -30,8 +36,10 @@ public class Main {
                 System.out.println(student);
 */
 
+/*
 // From JDK1.8+
             studentList.forEach(System.out::println);
+*/
 
 /*
     Homework:

@@ -1,5 +1,7 @@
 package bd.ac.seu.collections;
 
+import java.util.List;
+
 /**
  * Model class to represent Student data type.
  *
@@ -10,7 +12,7 @@ package bd.ac.seu.collections;
 public class Student {
     private int studentId;
     private String studentName;
-
+    private List<GradeEntry> gradeEntryList;
     /**
      * Creates a student with no id and no name.
      */
@@ -38,6 +40,10 @@ public class Student {
 
     public void setStudentName(String studentName) {
         this.studentName = studentName;
+    }
+
+    public List<GradeEntry> getGradeEntryList() {
+        return gradeEntryList;
     }
 
     @Override

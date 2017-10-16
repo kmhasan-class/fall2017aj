@@ -5,6 +5,14 @@ public class Course {
     private String courseTitle;
     private double credits;
 
+    /*
+    Lab task
+    add two methods
+    1) return the number of students that got grades for this course for a given semester
+        int getStudentCount(int semesterId)
+    2) return the average numeric grade point for all the students for this course for a given semester
+        double getAverageGrade(int semesterId)
+     */
     public Course() {
     }
 

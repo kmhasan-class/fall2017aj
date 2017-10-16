@@ -13,14 +13,19 @@ public class Main {
     private List<Course> courseList;
     private List<Registration> registrationList;
     private List<GradeRecord> gradeRecordList;
-    private Set<Faculty> facultySet;
+    private Map<String, Faculty> facultyMap;
     private Map<Integer, Student> studentMap;
     private Map<String, Course> courseMap;
+    private Map<String, Grade> gradeMap;
 
     public Main() {
         studentMap = new HashMap<>();
         courseMap = new HashMap<>();
-        facultySet = new HashSet<>();
+        facultyMap = new HashMap<>();
+        gradeMap = new HashMap<>();
+
+        for (Grade grade : Grade.values())
+            gradeMap.put(grade.getLetterGrade(), grade);
 
         StudentDao studentDao = new StudentDaoMysqlImplementation();
 //        StudentDao studentDao = new StudentDaoCsvImplementation();
@@ -36,7 +41,8 @@ public class Main {
         RegistrationDao registrationDao = new RegistrationDaoMysqlImplementation();
         registrationList = registrationDao.getAllRegistrations();
         for (Registration registration : registrationList)
-            facultySet.add(new Faculty(registration.getFacultyInitials()));
+            facultyMap.putIfAbsent(registration.getFacultyInitials(),
+                    new Faculty(registration.getFacultyInitials()));
 
         GradeRecordDao gradeRecordDao = new GradeRecordDaoMysqlImplementation();
         gradeRecordList = gradeRecordDao.getAllGradeRecords();
@@ -45,23 +51,17 @@ public class Main {
 
             Student student = studentMap.get(gradeRecord.getStudentId());
             Course course = courseMap.get(gradeRecord.getCourseCode());
-            // HW: Find a way to efficiently find a faculty from a given collection
-            // Hint: you can change the way how the faculties are stored
-            Faculty faculty = null;
+            Faculty faculty = facultyMap.get(gradeRecord.getFacultyInitials());
+            Grade grade = gradeMap.get(gradeRecord.getGrade());
 
-            // HW: efficiently find a Grade object based on letter grade that you
-            // read from the gradeRecord
+            GradeEntry gradeEntry = new GradeEntry(course, faculty, gradeRecord.getSemesterId(), grade);
 
-            // HW: once you have all these objects, add them as a GradeEntry object
-            // for the "student"
-            System.out.println(gradeRecord);
-            System.out.println(student);
-            System.out.println(course);
-
-            System.out.println();
-
+            student.getGradeEntryList().add(gradeEntry);
         }
 
+        Student student = studentList.get(studentList.size() - 1);
+        for (int i = 40; i <= 46; i++)
+            System.out.println(i + ": " + student.getTermGpa(i));
 /*
 // From JDK1.1+
             for (int i = 0; i < studentList.size(); i++)
@@ -72,12 +72,10 @@ public class Main {
             for (Student student : studentList)
                 System.out.println(student);
 */
-
 /*
 // From JDK1.8+
             studentList.forEach(System.out::println);
 */
-
 /*
     Homework:
     1. Find out the student with the longest name

@@ -1,5 +1,6 @@
 package bd.ac.seu.collections;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -17,6 +18,7 @@ public class Student {
      * Creates a student with no id and no name.
      */
     public Student() {
+        gradeEntryList = new ArrayList<>();
     }
 
     /**
@@ -26,6 +28,7 @@ public class Student {
      * @param studentName Name of the student
      */
     public Student(int studentId, String studentName) {
+        this();
         this.studentId = studentId;
         this.studentName = studentName;
     }
@@ -46,11 +49,35 @@ public class Student {
         return gradeEntryList;
     }
 
+    /*
+    Lab task:
+    add a method to return the CGPA of a student
+     */
+    public double getTermGpa(int semesterId) {
+        double sumGradePoints = 0.0;
+        double sumCredits = 0.0;
+
+        for (GradeEntry gradeEntry : gradeEntryList)
+            if (semesterId == gradeEntry.getSemesterId()) {
+                double credits = gradeEntry.getCourse().getCredits();
+                double numericGrade = gradeEntry.getGrade().getNumericGrade();
+
+                sumCredits = sumCredits + credits;
+                sumGradePoints = sumGradePoints + credits * numericGrade;
+            }
+
+        /*if (Math.abs(sumCredits - 0) < 0.001)
+            return 0.0;
+        else*/
+            return sumGradePoints / sumCredits;
+    }
+
     @Override
     public String toString() {
         return "Student{" +
                 "studentId=" + studentId +
                 ", studentName='" + studentName + '\'' +
+                ", gradeEntryList=" + gradeEntryList +
                 '}';
     }
 }

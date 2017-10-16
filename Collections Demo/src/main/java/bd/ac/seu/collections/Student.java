@@ -1,7 +1,9 @@
 package bd.ac.seu.collections;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Model class to represent Student data type.
@@ -49,6 +51,40 @@ public class Student {
         return gradeEntryList;
     }
 
+    public  double getCgpa() {
+        double sumGradePoints = 0.0;
+        double sumCredits = 0.0;
+
+        Map<Course, Grade> gradeMap = new HashMap<>();
+
+        for (GradeEntry gradeEntry : gradeEntryList) {
+            Course course = gradeEntry.getCourse();
+            Grade grade = gradeMap.get(course);
+            if (grade == null) {
+                gradeMap.put(course, grade);
+            } else {
+                Grade newGrade = gradeEntry.getGrade();
+                if (newGrade.getNumericGrade() > grade.getNumericGrade())
+                    grade = newGrade;
+                gradeMap.put(course, grade);
+            }
+            /*
+            double credits = gradeEntry.getCourse().getCredits();
+            double numericGrade = gradeEntry.getGrade().getNumericGrade();
+
+            sumCredits = sumCredits + credits;
+            sumGradePoints = sumGradePoints + credits * numericGrade;
+            */
+        }
+
+        gradeMap.forEach((course, grade) -> {
+            // do your computation
+        });
+        /*if (Math.abs(sumCredits - 0) < 0.001)
+            return 0.0;
+        else*/
+        return sumGradePoints / sumCredits;
+    }
     /*
     Lab task:
     add a method to return the CGPA of a student

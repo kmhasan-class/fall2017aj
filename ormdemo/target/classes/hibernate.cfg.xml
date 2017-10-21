@@ -10,9 +10,10 @@
         <property name="hibernate.connection.username">fall2017aj</property>
         <property name="hibernate.connection.password">aj</property>
         <property name="hibernate.dialect">org.hibernate.dialect.MySQL5Dialect</property>
-        <property name="hbm2ddl.auto">create</property>
+        <property name="hbm2ddl.auto">update</property>
         <property name="hibernate.show_sql">true</property>
 
-        <mapping class="bd.ac.seu.ormdemo.Student" />
+        <mapping class="bd.ac.seu.ormdemo.model.Student"/>
+        <mapping class="bd.ac.seu.ormdemo.model.Course"/>
     </session-factory>
 </hibernate-configuration>

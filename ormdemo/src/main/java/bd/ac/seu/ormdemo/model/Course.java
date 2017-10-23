@@ -1,7 +1,9 @@
 package bd.ac.seu.ormdemo.model;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
+import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 public class Course {
@@ -9,8 +11,18 @@ public class Course {
     private String courseCode;
     private String courseTitle;
     private double creditHours;
+    @ManyToMany
+    @JoinTable(name = "Registration",
+            joinColumns = {@JoinColumn(name = "courseCode")},
+            inverseJoinColumns = {@JoinColumn(name = "studentId")})
+    Set<Student> studentSet;
 
     public Course() {
+        studentSet = new HashSet<>();
+    }
+
+    public Set<Student> getStudentSet() {
+        return studentSet;
     }
 
     public Course(String courseCode, String courseTitle, double creditHours) {

@@ -2,9 +2,7 @@ package bd.ac.seu.ormdemo.model;
 
 // JPA - Java Persistence API
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.ManyToMany;
+import javax.persistence.*;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -15,6 +13,9 @@ public class Student {
     private String studentName;
     private String emailAddress;
     @ManyToMany
+    @JoinTable(name = "Registration",
+            joinColumns = {@JoinColumn(name = "studentId")},
+            inverseJoinColumns = {@JoinColumn(name = "courseCode")})
     private Set<Course> courseSet;
 
     public Student() {

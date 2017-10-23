@@ -1,5 +1,6 @@
 package bd.ac.seu.ormdemo;
 
+import bd.ac.seu.ormdemo.Service.StudentService;
 import bd.ac.seu.ormdemo.model.Course;
 import bd.ac.seu.ormdemo.model.Student;
 import org.hibernate.Session;
@@ -11,6 +12,9 @@ import java.util.List;
 
 public class Main {
     public Main() {
+        StudentService studentService = new StudentService();
+        studentService.addStudent(new Student(1, "John Doe"));
+
         SessionFactory sessionFactory = new Configuration()
                 .configure("hibernate.cfg.xml")
                 .buildSessionFactory();
@@ -28,6 +32,11 @@ public class Main {
         student.getCourseSet().add(course1);
         student.getCourseSet().add(course2);
         */
+
+        Course course = session.get(Course.class, "CSE4029");
+        System.out.println(course);
+        System.out.println("Registered students:");
+        course.getStudentSet().forEach(System.out::println);
         session.save(student);
 
 /*

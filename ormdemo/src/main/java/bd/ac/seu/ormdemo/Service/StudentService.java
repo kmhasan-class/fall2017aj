@@ -1,5 +1,6 @@
 package bd.ac.seu.ormdemo.Service;
 
+import bd.ac.seu.ormdemo.SessionFactorySingleton;
 import bd.ac.seu.ormdemo.model.Student;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -13,9 +14,7 @@ public class StudentService {
     SessionFactory sessionFactory;
 
     public StudentService() {
-        sessionFactory = new Configuration()
-                .configure("hibernate.cfg.xml")
-                .buildSessionFactory();
+        sessionFactory = SessionFactorySingleton.getSessionFactory();
     }
 
 
@@ -24,6 +23,16 @@ public class StudentService {
         Session session = sessionFactory.openSession();
         session.getTransaction().begin();
         session.save(student);
+        session.getTransaction().commit();
+    }
+
+    // Create
+    public void addAll(List<Student> studentList) {
+        Session session = sessionFactory.openSession();
+        session.getTransaction().begin();
+        //studentList.forEach(student -> session.save(student));
+        for (Student student : studentList)
+            session.save(student);
         session.getTransaction().commit();
     }
 

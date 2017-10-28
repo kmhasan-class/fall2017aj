@@ -1,20 +1,70 @@
 package bd.ac.seu.ormdemo;
 
 import bd.ac.seu.ormdemo.Service.StudentService;
-import bd.ac.seu.ormdemo.model.Sex;
-import bd.ac.seu.ormdemo.model.Student;
+import bd.ac.seu.ormdemo.model.*;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class Main {
-    public Main() {
-        StudentService studentService = new StudentService();
-        List<Student> studentList = studentService.getStudentList();
+    private static final String DOMAINS[] = {".edu", ".com", ".net", ".org"};
 
+    class StudentComparatorBasedOnEmailAddressInnerClass implements Comparator<Student> {
+
+        @Override
+        public int compare(Student s1, Student s2) {
+            if (s1.getEmailAddress().compareTo(s2.getEmailAddress()) < 0)
+                return -1;
+            else if (s1.getEmailAddress().compareTo(s2.getEmailAddress()) > 0)
+                return +1;
+            else return 0;
+        }
+    }
+
+    private String generateRandomName() {
+        StringBuilder stringBuilder = new StringBuilder();
+        int length = (int) (Math.random() * 10 + 3);
+        stringBuilder.append((char) (Math.random() * 26 + 'A'));
+        for (int i = 0; i < length; i++)
+            stringBuilder.append((char) (Math.random() * 26 + 'a' ));
+        return stringBuilder.toString();
+    }
+
+    private String generateRandomEmailAddress() {
+        StringBuilder stringBuilder = new StringBuilder();
+        int length = (int) (Math.random() * 5 + 3);
+        for (int i = 0; i < length; i++)
+            stringBuilder.append((char) (Math.random() * 26 + 'a' ));
+        stringBuilder.append('@');
+        length = (int) (Math.random() * 5 + 3);
+        for (int i = 0; i < length; i++)
+            stringBuilder.append((char) (Math.random() * 26 + 'a' ));
+        stringBuilder.append(DOMAINS[(int) (Math.random() * DOMAINS.length)]);
+        return stringBuilder.toString();
+    }
+
+    private void sortingDemo() {
+        double doubleArray[] = {5.25,6,2,1.21,3,7,-81.997,2,44,1,6};
+        String stringArray[] = {"apple", "peach", "baby", "apple124", "jackfruit", "123jackfruit", "banana"};
+/*
+        System.out.println("Before sorting " + Arrays.toString(stringArray));
+        Arrays.sort(stringArray);
+        System.out.println("After sorting  " + Arrays.toString(stringArray));
+*/
+
+        List<String> stringList = Arrays.asList(stringArray);
+        System.out.println("Before sorting: " + stringList);
+        Collections.sort(stringList);
+        System.out.println("After sorting:  " + stringList);
+    }
+
+    public Main() {
         long startTime, stopTime;
+        StudentService studentService = new StudentService();
+        startTime = System.currentTimeMillis();
+        List<Student> studentList = studentService.getStudentList();
+        stopTime = System.currentTimeMillis();
+        System.out.printf("Time taken to fetch student list: %.6f seconds\n", (stopTime - startTime) / 1000.0);
 
         startTime = System.currentTimeMillis();
         List<Student> femaleStudents = new ArrayList<>();
@@ -24,6 +74,37 @@ public class Main {
         stopTime = System.currentTimeMillis();
         System.out.println("We got " + femaleStudents.size() + " female students");
         System.out.printf("Time taken: %.6f seconds\n", (stopTime - startTime) / 1000.0);
+
+        System.out.println("Printing 10 female students BEFORE SORTING");
+        for (int i = 0; i < 10; i++)
+            System.out.println(femaleStudents.get(i));
+//        Collections.sort(femaleStudents, new StudentComparatorBasedOnNameLength());
+//        Collections.sort(femaleStudents, new StudentComparatorBasedOnEmailAddress());
+//        Collections.sort(femaleStudents, new StudentComparatorBasedOnEmailAddressInnerClass());
+/*        Collections.sort(femaleStudents, new Comparator<Student>() {
+            // Anonymous Inner Class
+            @Override
+            public int compare(Student s1, Student s2) {
+                if (s1.getEmailAddress().compareTo(s2.getEmailAddress()) < 0)
+                    return -1;
+                else if (s1.getEmailAddress().compareTo(s2.getEmailAddress()) > 0)
+                    return +1;
+                else return 0;
+            }
+        });*/
+
+    // lambda expression
+        Collections.sort(femaleStudents, (s1, s2)-> {
+                if (s1.getEmailAddress().compareTo(s2.getEmailAddress()) < 0)
+                    return -1;
+                else if (s1.getEmailAddress().compareTo(s2.getEmailAddress()) > 0)
+                    return +1;
+                else return 0;
+            });
+//        Collections.sort(femaleStudents, (s1, s2) -> s1.getEmailAddress().compareTo(s2.getEmailAddress()));
+        System.out.println("Printing 10 female students AFTER SORTING");
+        for (int i = 0; i < 10; i++)
+            System.out.println(femaleStudents.get(i));
 
         startTime = System.currentTimeMillis();
         List<Student> maleStudents = studentList
@@ -46,15 +127,25 @@ public class Main {
     }
 
          */
-        /*
+/*
+
+        startTime = System.currentTimeMillis();
+        List<Student> insertionList = new ArrayList<>();
         for (int i = 1; i <= 1000000; i++) {
             Student student = new Student(i,
-                    null,
-                    null,
+                    new Name(generateRandomName(), generateRandomName()),
+                    generateRandomEmailAddress(),
                     Math.random() < 0.5 ? Sex.MALE : Sex.FEMALE,
                     null);
-            studentService.addStudent(student);
+            insertionList.add(student);
         }
+        stopTime = System.currentTimeMillis();
+        System.out.printf("Done storing them in a list in %.3f seconds.\n", (stopTime - startTime) / 1000.0);
+        startTime = System.currentTimeMillis();
+        studentService.addAll(insertionList);
+        stopTime = System.currentTimeMillis();
+        System.out.printf("Done storing them in the database in %.3f seconds.\n", (stopTime - startTime) / 1000.0);
+
 */
         /*
         Course course1 = session.get(Course.class, "CSE2015");
@@ -88,6 +179,8 @@ public class Main {
 
 
         //System.out.println(student);
+
+        SessionFactorySingleton.getSessionFactory().close();
     }
 
     public static void main(String args[]) {

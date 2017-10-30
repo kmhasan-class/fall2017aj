@@ -2,6 +2,8 @@ package bd.ac.seu.ormdemo;
 
 import bd.ac.seu.ormdemo.Service.StudentService;
 import bd.ac.seu.ormdemo.model.*;
+import bd.ac.seu.ormdemo.util.Filter;
+import bd.ac.seu.ormdemo.util.TestInterface;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -26,7 +28,7 @@ public class Main {
         int length = (int) (Math.random() * 10 + 3);
         stringBuilder.append((char) (Math.random() * 26 + 'A'));
         for (int i = 0; i < length; i++)
-            stringBuilder.append((char) (Math.random() * 26 + 'a' ));
+            stringBuilder.append((char) (Math.random() * 26 + 'a'));
         return stringBuilder.toString();
     }
 
@@ -34,17 +36,17 @@ public class Main {
         StringBuilder stringBuilder = new StringBuilder();
         int length = (int) (Math.random() * 5 + 3);
         for (int i = 0; i < length; i++)
-            stringBuilder.append((char) (Math.random() * 26 + 'a' ));
+            stringBuilder.append((char) (Math.random() * 26 + 'a'));
         stringBuilder.append('@');
         length = (int) (Math.random() * 5 + 3);
         for (int i = 0; i < length; i++)
-            stringBuilder.append((char) (Math.random() * 26 + 'a' ));
+            stringBuilder.append((char) (Math.random() * 26 + 'a'));
         stringBuilder.append(DOMAINS[(int) (Math.random() * DOMAINS.length)]);
         return stringBuilder.toString();
     }
 
     private void sortingDemo() {
-        double doubleArray[] = {5.25,6,2,1.21,3,7,-81.997,2,44,1,6};
+        double doubleArray[] = {5.25, 6, 2, 1.21, 3, 7, -81.997, 2, 44, 1, 6};
         String stringArray[] = {"apple", "peach", "baby", "apple124", "jackfruit", "123jackfruit", "banana"};
 /*
         System.out.println("Before sorting " + Arrays.toString(stringArray));
@@ -59,6 +61,23 @@ public class Main {
     }
 
     public Main() {
+        List<Course> courseList = new ArrayList<>();
+        courseList.add(new Course("CSE1021", "Discreate Mathematics", 3));
+        courseList.add(new Course("CSE1012", "Programming Language I", 1));
+        courseList.add(new Course("ENG1001", "Basic Composition", 0));
+        courseList.add(new Course("MATH1024", "Coordinate Geometry", 3));
+        courseList.add(new Course("MATH2015", "Linear Algebra", 3));
+        Filter<Course> courseFilter = new Filter<>();
+        //List<Course> courseSubset = courseFilter.getSubset(courseList, course -> course.getCourseCode().startsWith("CSE"));
+        List<Course> courseSubset = courseFilter.getSubset(courseList, course -> course.getCreditHours() == 3);
+        courseSubset.forEach(System.out::println);
+
+        String[] strings = {"Abul", "Babul", "Kabul", "Putul", "Tutul", "Rafiq", "Rakibul", "Monirul", "Ashiqur"};
+        List<String> stringList = Arrays.asList(strings);
+        Filter<String> stringFilter = new Filter<>();
+        List<String> stringNotEndingWithUl = stringFilter.getSubset(stringList, string -> !string.endsWith("ul"));
+        System.out.println(stringNotEndingWithUl);
+
         long startTime, stopTime;
         StudentService studentService = new StudentService();
         startTime = System.currentTimeMillis();
@@ -67,10 +86,36 @@ public class Main {
         System.out.printf("Time taken to fetch student list: %.6f seconds\n", (stopTime - startTime) / 1000.0);
 
         startTime = System.currentTimeMillis();
+        /*
         List<Student> femaleStudents = new ArrayList<>();
         for (Student student : studentList)
             if (student.getSex() == Sex.FEMALE)
                 femaleStudents.add(student);
+        */
+
+        Filter<Student> studentFilter = new Filter<>();
+        List<Student> femaleStudents = studentFilter.getSubset(studentList, (student) -> {
+            return (student.getSex() == Sex.FEMALE);
+        });
+
+        List<Student> maleList = studentFilter.getSubset(studentList, student -> student.getSex() == Sex.MALE);
+
+        List<Student> studentWithNullAddressList = studentFilter.getSubset(studentList,
+                (student) -> {
+                    if (student.getAddress() == null)
+                        return true;
+                    else {
+                        if (student.getAddress().getStreetAddress() == null)
+                            return true;
+                        if (student.getAddress().getCity() == null)
+                            return true;
+                        if (student.getAddress().getPostalCode() == null)
+                            return true;
+                        return false;
+                    }
+                });
+
+
         stopTime = System.currentTimeMillis();
         System.out.println("We got " + femaleStudents.size() + " female students");
         System.out.printf("Time taken: %.6f seconds\n", (stopTime - startTime) / 1000.0);
@@ -93,14 +138,14 @@ public class Main {
             }
         });*/
 
-    // lambda expression
-        Collections.sort(femaleStudents, (s1, s2)-> {
-                if (s1.getEmailAddress().compareTo(s2.getEmailAddress()) < 0)
-                    return -1;
-                else if (s1.getEmailAddress().compareTo(s2.getEmailAddress()) > 0)
-                    return +1;
-                else return 0;
-            });
+        // lambda expression
+        Collections.sort(femaleStudents, (s1, s2) -> {
+            if (s1.getEmailAddress().compareTo(s2.getEmailAddress()) < 0)
+                return -1;
+            else if (s1.getEmailAddress().compareTo(s2.getEmailAddress()) > 0)
+                return +1;
+            else return 0;
+        });
 //        Collections.sort(femaleStudents, (s1, s2) -> s1.getEmailAddress().compareTo(s2.getEmailAddress()));
         System.out.println("Printing 10 female students AFTER SORTING");
         for (int i = 0; i < 10; i++)

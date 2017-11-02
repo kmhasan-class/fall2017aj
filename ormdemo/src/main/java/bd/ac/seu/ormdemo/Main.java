@@ -69,13 +69,13 @@ public class Main {
         courseList.add(new Course("MATH2015", "Linear Algebra", 3));
         Filter<Course> courseFilter = new Filter<>();
         //List<Course> courseSubset = courseFilter.getSubset(courseList, course -> course.getCourseCode().startsWith("CSE"));
-        List<Course> courseSubset = courseFilter.getSubset(courseList, course -> course.getCreditHours() == 3);
+        Collection<Course> courseSubset = courseFilter.getSubset(courseList, course -> course.getCreditHours() == 3);
         courseSubset.forEach(System.out::println);
 
         String[] strings = {"Abul", "Babul", "Kabul", "Putul", "Tutul", "Rafiq", "Rakibul", "Monirul", "Ashiqur"};
         List<String> stringList = Arrays.asList(strings);
         Filter<String> stringFilter = new Filter<>();
-        List<String> stringNotEndingWithUl = stringFilter.getSubset(stringList, string -> !string.endsWith("ul"));
+        Collection<String> stringNotEndingWithUl =  stringFilter.getSubset(stringList, string -> !string.endsWith("ul"));
         System.out.println(stringNotEndingWithUl);
 
         long startTime, stopTime;
@@ -94,13 +94,16 @@ public class Main {
         */
 
         Filter<Student> studentFilter = new Filter<>();
-        List<Student> femaleStudents = studentFilter.getSubset(studentList, (student) -> {
+        Collection<Student> femaleCollection = studentFilter.getSubset(studentList, (student) -> {
             return (student.getSex() == Sex.FEMALE);
         });
+        List<Student> femaleStudents = null;
+        if (femaleCollection instanceof List)
+            femaleStudents = (List<Student>) femaleCollection;
 
-        List<Student> maleList = studentFilter.getSubset(studentList, student -> student.getSex() == Sex.MALE);
+        Collection<Student> maleList = studentFilter.getSubset(studentList, student -> student.getSex() == Sex.MALE);
 
-        List<Student> studentWithNullAddressList = studentFilter.getSubset(studentList,
+        Collection<Student> studentWithNullAddressList = studentFilter.getSubset(studentList,
                 (student) -> {
                     if (student.getAddress() == null)
                         return true;

@@ -5,10 +5,11 @@ import bd.ac.seu.ormdemo.model.Sex;
 import bd.ac.seu.ormdemo.model.Student;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 public class Filter<T> {
-    public List<T> getSubset(List<T> list, TestInterface<T> testInterface) {
+    public Collection<T> getSubset(Collection<T> list, TestInterface<T> testInterface) {
         List<T> newList = new ArrayList<>();
         for (T t : list) {
             if (testInterface.test(t))

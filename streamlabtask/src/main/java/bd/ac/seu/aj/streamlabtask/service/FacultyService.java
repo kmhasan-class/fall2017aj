@@ -13,6 +13,9 @@ public class FacultyService {
     }
 
     public List<Faculty> findByRank(Rank rank) {
-        return findAll().stream().filter(faculty -> faculty.getRank() == rank).collect(Collectors.toList());
+        return findAll()
+                .stream()
+                .filter(faculty -> faculty.getRank() == rank)
+                .collect(Collectors.toList());
     }
 }

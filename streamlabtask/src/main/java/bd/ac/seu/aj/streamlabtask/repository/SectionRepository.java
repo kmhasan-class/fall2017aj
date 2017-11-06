@@ -24,7 +24,7 @@ public class SectionRepository {
         List<Faculty> facultyList = FacultyRepository.getFacultyList();
 
         for (int i = 0; i < sectionCount; i++) {
-            Faculty faculty = null; // ADD CODE TO RANDOMLY PICK A FACULTY
+            Faculty faculty = facultyList.get((int) (Math.random() * facultyList.size())); // ADD CODE TO RANDOMLY PICK A FACULTY
             Course course = null; // ADD CODE TO RANDOMLY PICK A COURSE
             Semester semester = null; // ADD CODE TO RANDOMLY PICK A SEMESTER IN THE RANGE [1, 50]
             int sectionNumber = 0; // ADD CODE TO FIND OUT WHAT THE NEW SECTION NUMBER SHOULD BE

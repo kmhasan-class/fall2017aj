@@ -18,6 +18,7 @@ public class Main {
     public void doRandomGradeAssignment() {
 
     }
+
     public Main() {
         StudentService studentService = new StudentService();
         System.out.println("Student count "  + studentService.findAll().size());

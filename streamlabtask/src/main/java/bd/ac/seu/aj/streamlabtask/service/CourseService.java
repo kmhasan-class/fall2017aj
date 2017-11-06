@@ -12,6 +12,10 @@ public class CourseService {
     }
 
     public List<Course> findByPrefix(String prefix) {
-        return findAll().stream().filter(course -> course.getCourseCode().startsWith(prefix)).distinct().collect(Collectors.toList());
+        return findAll()
+                .stream()
+                .filter(course -> course.getCourseCode().startsWith(prefix))
+                .distinct()
+                .collect(Collectors.toList());
     }
 }

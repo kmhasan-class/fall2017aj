@@ -20,4 +20,44 @@ public class StudentService {
     public Optional<Student> findStudentById(int studentId) {
         return findAll().stream().filter(student -> student.getStudentId() == studentId).findAny();
     }
+
+    /**
+     * Computes the CGPA of a student
+     * @param studentId the id of the student
+     * @return CGPA of the student
+     */
+    public double getCgpa(int studentId) {
+        // ADD CODE TO DO THE COMPUTATIONS WITH LAMBDAS AND STREAMS
+        return 0.0;
+    }
+
+    /**
+     * Computes the term GPA of a student for a given semester
+     * @param studentId the id of the student
+     * @param semesterNumber the semester number
+     * @return term GPA of the student for the given semester
+     */
+    public double getGpa(int studentId, int semesterNumber) {
+        // ADD CODE TO DO THE COMPUTATIONS WITH LAMBDAS AND STREAMS
+        return 0.0;
+    }
+
+    /**
+     * Computes the average GPA of all the students for a given semester
+     * @param semesterNumber the semester number
+     * @return average GPA of all the students for the given semester
+     */
+    public double getAverageGpa(int semesterNumber) {
+        // ADD CODE TO DO THE COMPUTATIONS WITH LAMBDAS AND STREAMS
+        return 0.0;
+    }
+
+    /**
+     * Finds the student with the highest CGPA
+     * @return optionally returns student object that has the highest CGPA if one such exists
+     */
+    public Optional<Student> getBestStudent() {
+        // ADD CODE TO DO THE COMPUTATIONS WITH LAMBDAS AND STREAMS
+        return null;
+    }
 }

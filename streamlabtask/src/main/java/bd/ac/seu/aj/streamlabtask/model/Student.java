@@ -1,6 +1,6 @@
 package bd.ac.seu.aj.streamlabtask.model;
 
-import org.springframework.data.util.Pair;
+import bd.ac.seu.aj.streamlabtask.util.Pair;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -28,6 +28,7 @@ public class StudentService {
      */
     public double getCgpa(int studentId) {
         // ADD CODE TO DO THE COMPUTATIONS WITH LAMBDAS AND STREAMS
+        //findAll().stream().filter(student -> student.getStudentId() == studentId).findFirst().get().
         return 0.0;
     }
 
@@ -58,6 +59,8 @@ public class StudentService {
      */
     public Optional<Student> getBestStudent() {
         // ADD CODE TO DO THE COMPUTATIONS WITH LAMBDAS AND STREAMS
+        //Student bestStudent = null;
+        //Optional<Student> optionalStudent = Optional.of(bestStudent);
         return null;
     }
 }

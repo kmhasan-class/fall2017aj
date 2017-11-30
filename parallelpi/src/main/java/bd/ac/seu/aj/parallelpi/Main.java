@@ -5,6 +5,8 @@ package bd.ac.seu.aj.parallelpi;
 public class Main {
     public Main() {
         PiCalculator piCalculator = new PiCalculator();
+        piCalculator.getPiExecutorRunnable(80000000l, 8);
+        /*
         System.out.println(piCalculator.getPi(1l));
         System.out.println(piCalculator.getPi(10l));
         System.out.println(piCalculator.getPi(100l));
@@ -16,6 +18,7 @@ public class Main {
         System.out.println(piCalculator.getPi(100000000l));
         System.out.println(piCalculator.getPi(1000000000l));
         System.out.println(piCalculator.getPi(10000000000l));
+        */
     }
 
     public static void main(String args[]) {

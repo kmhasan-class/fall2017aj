@@ -2,10 +2,18 @@ package bd.ac.seu.aj.parallelpi;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.concurrent.*;
+import java.util.stream.IntStream;
+import java.util.stream.Stream;
 
 public class PiCalculator {
     public static final BigDecimal FOUR = new BigDecimal(4);
     private BigDecimal result = BigDecimal.ZERO;
+    private long termParts;
+    private int resultSum;
 
     private synchronized void addResult(BigDecimal otherResult) {
         result = result.add(otherResult);
@@ -44,48 +52,120 @@ public class PiCalculator {
         return sum.multiply(FOUR);
     }
 
-    public BigDecimal getPiParallel(long terms, int cores) {
+    public BigDecimal getPiParallel(long terms, int threads) {
         result = BigDecimal.ZERO;
-        Thread threads[] = new Thread[cores];
+        Thread threadArray[] = new Thread[threads];
 
-        // Hometask: fix this part where the number of terms is not divisible by cores
-        // Hometask: rewrite this as lambdas (without threads) and streams and use parallel streams
-        // Hometask: read up on Executor Framework and see how you can submit the tasks and get the results back
-        long termParts = terms / cores;
-        for (int i = 0; i < cores; i++) {
-            long startTerm = 1 + (terms * i / cores);
-            threads[i] = new Thread(() -> {
+        // Hometask #1: fix this part where the number of terms is not divisible by cores
+        // Hometask #2: rewrite this as lambdas (without threads) and streams and use parallel streams
+        // Hometask #3: read up on Executor Framework and see how you can submit the tasks and get the results back
+        termParts = terms / threads;
+        long remaining = terms % threads;
+        for (int i = 0; i < threads; i++) {
+            long startTerm = 1 + (terms * i / threads);
+            if (i == threads - 1)
+                termParts = termParts + remaining;
+            threadArray[i] = new Thread(() -> {
                 BigDecimal result1 = getPiBigDecimal(startTerm, termParts);
                 addResult(result1);
             });
-            threads[i].start();
+            threadArray[i].start();
         }
-        for (Thread thread : threads)
+        for (Thread thread : threadArray)
             try {
                 thread.join();
             } catch (InterruptedException ie) {
                 System.err.println(ie.toString());
             }
-        /*
-        Thread thread1 = new Thread(() -> {
-            BigDecimal result1 = getPiBigDecimal(1, terms / 2);
-            addResult(result1);
-        });
-        thread1.start();
-
-        Thread thread2 = new Thread(() -> {
-            BigDecimal result2 = getPiBigDecimal(terms / 2 + 1, terms / 2);
-            addResult(result2);
-        });
-        thread2.start();
-
-        try {
-            thread1.join();
-            thread2.join();
-        } catch (Exception e) {
-            System.err.println(e.toString());
-        }
-*/
         return result;
     }
+
+    public BigDecimal getPiExecutorRunnable(long terms, int threads) {
+        result = BigDecimal.ZERO;
+        ExecutorService executorService = Executors.newFixedThreadPool(threads);
+
+        termParts = terms / threads;
+        long remaining = terms % threads;
+        for (int i = 0; i < threads; i++) {
+            long startTerm = 1 + (terms * i / threads);
+            if (i == threads - 1)
+                termParts = termParts + remaining;
+
+            executorService.submit(() -> {
+                BigDecimal result1 = getPiBigDecimal(startTerm, termParts);
+                addResult(result1);
+            });
+        }
+        executorService.shutdown();
+        System.out.println("Done with thread submission");
+        try {
+            executorService.awaitTermination(5, TimeUnit.SECONDS);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        System.out.println("Done with all the threads " + executorService.isTerminated());
+        System.out.println(result);
+        return result;
+    }
+
+    public BigDecimal getPiExecutorCallable(long terms, int threads) {
+        result = BigDecimal.ZERO;
+        ExecutorService executorService = Executors.newFixedThreadPool(threads);
+        Future<BigDecimal> futures[] = new Future[threads];
+
+        termParts = terms / threads;
+        long remaining = terms % threads;
+        for (int i = 0; i < threads; i++) {
+            long startTerm = 1 + (terms * i / threads);
+            if (i == threads - 1)
+                termParts = termParts + remaining;
+/*
+            futures[i] = executorService.submit(new Callable<BigDecimal>() {
+                @Override
+                public BigDecimal call() throws Exception {
+                    return getPiBigDecimal(startTerm, termParts);
+                }
+            });
+*/
+            futures[i] = executorService.submit(() -> getPiBigDecimal(startTerm, termParts));
+        }
+        executorService.shutdown();
+        System.out.println("Done with thread submission");
+        try {
+            executorService.awaitTermination(10, TimeUnit.SECONDS);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        System.out.println("Done with all the threads " + executorService.isTerminated());
+        BigDecimal piValue = BigDecimal.ZERO;
+        try {
+            for (Future<BigDecimal> f : futures)
+                piValue = piValue.add(f.get());
+        } catch (ExecutionException ee) {
+            ee.printStackTrace();
+        } catch (InterruptedException ie) {
+            ie.printStackTrace();
+        }
+        return piValue;
+    }
+
+
+    // Hint for task 2
+
+    public void doSomething() {
+        List<String> stringList = new ArrayList<>();
+        stringList.add(new String("test"));
+        stringList.add(new String("resting"));
+        stringList.add(new String("best"));
+        resultSum = 0;
+        stringList
+                .stream()
+                .parallel()
+                .map(s -> s.length())
+                .forEach(integer -> {
+                    resultSum = resultSum + integer;
+                });
+        System.out.println(resultSum);
+    }
+
 }

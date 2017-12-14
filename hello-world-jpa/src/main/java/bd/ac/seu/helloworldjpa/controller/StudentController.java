@@ -4,9 +4,8 @@ import bd.ac.seu.helloworldjpa.model.Student;
 import bd.ac.seu.helloworldjpa.respository.StudentRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -15,10 +14,16 @@ public class StudentController {
     @Autowired
     private StudentRepository studentRepository;
 
-    @RequestMapping(value = "/")
+/*    @RequestMapping(value = "/")
     @ResponseBody
     public String handleIndex() {
         return "HELLO!";
+    }*/
+
+    @RequestMapping(value="/greetings")
+    public String handleGreetings(Model model) {
+        model.addAttribute("name", "Somename");
+        return "greetings";
     }
 
     @RequestMapping(value = "/test")
@@ -28,23 +33,31 @@ public class StudentController {
     }
 
     @RequestMapping(value = "/students")
-    @ResponseBody
-    public List<Student> getAllStudents() {
-        return studentRepository.findAll();
+    public String getAllStudents(Model model) {
+        model.addAttribute("students", studentRepository.findAll());
+        return "students";
     }
 
-    @RequestMapping(value = "/student")
-    @ResponseBody
-    public Student getOneStudent(@RequestParam String id) {
-        return studentRepository.findOne(id);
+    @RequestMapping(value = "/student/{id}")
+    public String getOneStudent(@PathVariable String id, Model model) {
+        model.addAttribute("student", studentRepository.findOne(id));
+        return "student";
     }
 
-    @RequestMapping(value = "/insert_student")
+    @RequestMapping(value = "/insert_student", method = RequestMethod.POST)
     @ResponseBody
     public String insertStudent(@RequestParam String id,
                                 @RequestParam String name,
                                 @RequestParam double cgpa) {
-        studentRepository.save(new Student(id, name, cgpa));
+        Student student = new Student(id, name, cgpa);
+        studentRepository.save(student);
         return "Student inserted";
+    }
+
+    @RequestMapping(value = "/students_model")
+    //@ResponseBody
+    public void getAllStudentsInModel(Model model) {
+        model.addAttribute("students", studentRepository.findAll());
+        ///return studentRepository.findAll();
     }
 }

@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <title>Form example</title>
+    </head>
+    <body>
+        <h1>Add a student</h1>
+        <form method="post" action="http://localhost:8081/insert_student">
+            ID: <input type="text" name="id"><br/>
+            Name: <input type="text" name="name"><br/>
+            CGPA: <input type="text" name="cgpa"><br/>
+            <input type="submit">
+        </form>
+
+    </body>
+</html>

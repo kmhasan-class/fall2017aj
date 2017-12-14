@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <title>Students</title>
+</head>
+<body>
+    <h1>Student Profile</h1>
+    <h2 th:text="${'Student ID: ' + student.studentId}">Student ID: 6587</h2>
+    <h2 th:text="${'Student Name: ' + student.studentName}">Student Name: John Doe</h2>
+    <h2 th:text="${'Student CGPA: ' + student.cgpa}">Student CGPA: 4.00</h2>
+</body>
+</html>

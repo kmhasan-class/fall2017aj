@@ -1,0 +1,21 @@
+<!DOCTYPE HTML>
+        <html xmlns:th="http://www.thymeleaf.org">
+        <head>
+            <title>Getting Started: Serving Web Content</title>
+            <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+        </head>
+<body>
+<table border="1">
+    <tr>
+        <td>ID</td>
+        <td>Name</td>
+        <td>CGPA</td>
+    </tr>
+    <tr th:each="student :  ${students}">
+        <td><p th:text="${student.id}" /></td>
+        <td><p th:text="${student.name}" /></td>
+        <td><p th:text="${student.cgpa}" /></td>
+    </tr>
+</table>
+</body>
+</html>

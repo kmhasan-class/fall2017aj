@@ -14,11 +14,10 @@ public class StudentController {
     @Autowired
     private StudentRepository studentRepository;
 
-/*    @RequestMapping(value = "/")
-    @ResponseBody
+    @RequestMapping(value = "/")
     public String handleIndex() {
-        return "HELLO!";
-    }*/
+        return "index";
+    }
 
     @RequestMapping(value="/greetings")
     public String handleGreetings(Model model) {

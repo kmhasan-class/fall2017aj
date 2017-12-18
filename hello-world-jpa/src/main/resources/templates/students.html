@@ -23,7 +23,7 @@
         </tr>
         <tr th:each="student : ${students}">
             <!--Note to self: Need to check how to incorporate a href with qutations-->
-            <td th:text="${student.studentId}">42011</td>
+            <td><a th:href="${'student/' + student.studentId}" th:text="${student.studentId}">42011</a></td>
             <td th:text="${student.studentName}">John Doe</td>
             <td th:text="${student.cgpa}">3.54</td>
         </tr>

@@ -8,7 +8,9 @@
     <link rel="stylesheet" th:href="@{/bootstrap.css}" href="../static/bootstrap.css" />
 </head>
 <body>
-    <h1>List of students as an unordered list</h1>
+    <div class="jumbotron">
+        <h1>List of students as an unordered list</h1>
+    </div>
     <ul>
         <li th:each="student : ${students}"
             th:text="${student.studentName}">Apple</li>

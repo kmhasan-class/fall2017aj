@@ -8,10 +8,18 @@ public class Student {
     public Student() {
     }
 
+    public Student copy() {
+        return new Student(studentId, studentName, cgpa);
+    }
+
     public Student(String studentId, String studentName, double cgpa) {
         this.studentId = studentId;
         this.studentName = studentName;
         this.cgpa = cgpa;
+    }
+
+    public void setStudentId(String studentId) {
+        this.studentId = studentId;
     }
 
     public String getStudentId() {

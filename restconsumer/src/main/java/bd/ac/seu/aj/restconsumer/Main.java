@@ -11,11 +11,13 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class Main {
     public Main() {
-        mizansQuestion();
+        //mizansQuestion();
         readAllStudents();
         System.out.println("-----");
         readOneStudents("420");
@@ -83,12 +85,37 @@ public class Main {
     }
 
     private void createStudent(String studentId, String studentName, double cgpa) {
+        // You could use Apache's HTTP client library to do things more elegantly
+        // http://www.baeldung.com/httpclient-post-http-request
         Student student = new Student(studentId, studentName, cgpa);
         try {
             URL url = new URL("http://localhost:8081/api/v1/student");
             HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+            connection.setDoOutput(true);
             connection.setRequestMethod("POST");
-            String parameters = "studentId=44561&studentName=Putul&cgpa=2.9";
+
+            Map<String, String> parameterMap = new HashMap<>();
+            parameterMap.put("studentId", "12345");
+            parameterMap.put("studentName", "John Doe");
+            parameterMap.put("cgpa", "2.35");
+
+            StringBuilder builder = new StringBuilder();
+            parameterMap.forEach((key, value) -> {
+                if (builder.length() > 0)
+                    builder.append('&');
+                builder.append(key);
+                builder.append('=');
+                builder.append(value);
+            });
+
+            String parameters = builder.toString();
+            connection.getOutputStream().write(parameters.getBytes());
+
+            BufferedReader reader = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+            String line;
+
+            while ((line = reader.readLine()) != null)
+                System.out.println(line);
         } catch (MalformedURLException e) {
             e.printStackTrace();
         } catch (IOException e) {

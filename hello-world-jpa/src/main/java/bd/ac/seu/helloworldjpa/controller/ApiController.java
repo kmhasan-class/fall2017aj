@@ -3,10 +3,14 @@ package bd.ac.seu.helloworldjpa.controller;
 import bd.ac.seu.helloworldjpa.model.Student;
 import bd.ac.seu.helloworldjpa.respository.StudentRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 @RestController
@@ -16,7 +20,11 @@ public class ApiController {
     private StudentRepository studentRepository;
 
     @RequestMapping("students")
-    public List<Student> findAllStudents() {
+    public List<Student> findAllStudents(Authentication authentication) {
+        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+        System.out.println(userDetails.getUsername());
+        System.out.println(userDetails.getPassword());
+        authentication.getAuthorities().forEach(System.out::println);
         return studentRepository.findAll();
     }
 

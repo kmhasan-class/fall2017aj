@@ -1,0 +1,13 @@
+package bd.ac.seu.aj.vaadindemo;
+
+import bd.ac.seu.aj.vaadindemo.model.Student;
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+
+@SpringBootApplication
+public class VaadinDemoApplication {
+
+	public static void main(String[] args) {
+		SpringApplication.run(VaadinDemoApplication.class, args);
+	}
+}
